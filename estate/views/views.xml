@@ -64,7 +64,6 @@
                     <field name="description"/>
                     <field name="postcode"/>
                     <field name="date_availability"/>
-                  
                   </group>
                   <group string="Area Details">
                     <field name="living_area"/>
