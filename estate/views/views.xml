@@ -1,0 +1,142 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="estate.list">
+      <field name="name">estate list</field>
+      <field name="model">estate.estate</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="description"/>
+          <field name="postcode"/>
+          <field name="date_availability"/>
+          <field name="expected_price"/>
+          <field name="selling_price"/>
+          <field name="bedrooms"/>
+          <field name="living_area"/>
+          <field name="facades"/>
+          <field name="garage"/>
+          <field name="garden"/>
+          <field name="garden_area"/>
+          <field name="garden_orientation"/>
+        </list>
+      </field>
+    </record>
+
+    <!-- Search  -->
+    <record model="ir.ui.view" id="estate.search">
+      <field name="name">estate search</field>
+      <field name="model">estate.estate</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name"/>
+          <field name="postcode"/>
+          <field name="bedrooms"/>
+          <field name="living_area"/>
+          <filter string="Available" name="available" domain="[('date_availability', '&gt;=', context_today())]"/>
+          <filter string="Has Garden" name="has_garden" domain="[('garden', '=', True)]"/>
+          <filter string="Has Garage" name="has_garage" domain="[('garage', '=', True)]"/>
+          <group expand="1" string="Group By">
+            <filter string="Postcode" name="group_postcode" context="{'group_by':'postcode'}"/>
+            <filter string="Garden Orientation" name="group_garden_orientation" context="{'group_by':'garden_orientation'}"/>
+          </group>
+        </search>
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+    <record model="ir.ui.view" id="estate.form">
+      <field name="name">estate form</field>
+      <field name="model">estate.estate</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <div class="oe_title">
+              <h1>
+                <field name="name" placeholder="Property Name"/>
+              </h1>
+            </div>
+            <notebook>
+              <page string="General Information" name="general_info">
+                <group>
+                  <group string="Basic Details">
+                    <field name="description"/>
+                    <field name="postcode"/>
+                    <field name="date_availability"/>
+                  
+                  </group>
+                  <group string="Area Details">
+                    <field name="living_area"/>
+                    <field name="bedrooms"/>
+                    <field name="facades"/>
+                  </group>
+                </group>
+              </page>
+              <page string="Pricing" name="pricing">
+                <group>
+                  <group string="Price Information">
+                    <field name="expected_price"/>
+                    <field name="selling_price"/>
+                  </group>
+                </group>
+              </page>
+              <page string="Features" name="features">
+                <group>
+                  <group string="Property Features">
+                    <field name="garage"/>
+                    <field name="garden"/>
+                  </group>
+                  <group string="Garden Details" invisible="not garden">
+                    <field name="garden_area"/>
+                    <field name="garden_orientation"/>
+                  </group>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="estate.action_window">
+      <field name="name">Estate Properties</field>
+      <field name="res_model">estate.estate</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+
+    <record model="ir.actions.server" id="estate.action_server">
+      <field name="name">estate server</field>
+      <field name="model_id" ref="model_estate_estate"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "list,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+
+
+    <!-- Top menu item -->
+
+    <menuitem name="Estate" id="estate.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Properties" id="estate.menu_1" parent="estate.menu_root"/>
+
+    <!-- actions -->
+
+    <menuitem name="All Properties" id="estate.menu_1_list" parent="estate.menu_1"
+              action="estate.action_window"/>
+
+  </data>
+</odoo>
