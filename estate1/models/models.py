@@ -21,9 +21,3 @@ class estate1(models.Model):
         for record in self:
             record.value2 = float(record.value) / 100
 
-class SalePerson(models.Model):
-    _name = 'estate1.property.type'
-    _description = 'Sele Person'
-
-    name = fields.Char(string='Name', required=True)
-
